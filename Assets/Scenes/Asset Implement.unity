@@ -1566,7 +1566,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4141271430317595597, guid: b5a277a67b1d53549bf68c1a660e0f75, type: 3}
       propertyPath: myType
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4141271430317595597, guid: b5a277a67b1d53549bf68c1a660e0f75, type: 3}
       propertyPath: myState
@@ -27035,7 +27035,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4141271430317595597, guid: b5a277a67b1d53549bf68c1a660e0f75, type: 3}
       propertyPath: myType
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4141271430317595597, guid: b5a277a67b1d53549bf68c1a660e0f75, type: 3}
       propertyPath: myState
@@ -29601,6 +29601,10 @@ PrefabInstance:
       value: Canon
       objectReference: {fileID: 0}
     - target: {fileID: 5915987010357127188, guid: 95b449073f9a17d4aae3227b63f9fdf3, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 128931039, guid: 0024297d5e17c3d43afb13a9cc00a2b5, type: 3}
+    - target: {fileID: 5915987010357127188, guid: 95b449073f9a17d4aae3227b63f9fdf3, type: 3}
       propertyPath: m_Color.a
       value: 0.6392157
       objectReference: {fileID: 0}
@@ -29613,6 +29617,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1319787067992964765, guid: 2d9babd748aac3048a872034470dd01f, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 128931039, guid: 0024297d5e17c3d43afb13a9cc00a2b5, type: 3}
     - target: {fileID: 1319787068229466960, guid: 2d9babd748aac3048a872034470dd01f, type: 3}
       propertyPath: m_Name
       value: Bubble Triangle
@@ -29681,6 +29689,14 @@ PrefabInstance:
       propertyPath: colorsOnTriangle.Array.data[2]
       value: 
       objectReference: {fileID: 923769362}
+    - target: {fileID: 1319787068537017220, guid: 2d9babd748aac3048a872034470dd01f, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 128931039, guid: 0024297d5e17c3d43afb13a9cc00a2b5, type: 3}
+    - target: {fileID: 1319787069631527059, guid: 2d9babd748aac3048a872034470dd01f, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 128931039, guid: 0024297d5e17c3d43afb13a9cc00a2b5, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2d9babd748aac3048a872034470dd01f, type: 3}
 --- !u!4 &6032803752643414591 stripped

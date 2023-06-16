@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum BubbleTypes { RED, YELLOW, BLUE, GREEN, BLACK, PINK, SKY, VIOLET };
+public enum BubbleTypes { RED, YELLOW, BLUE, GREEN, BLACK, PINK, SKY };
 
 public class GameManager : MonoBehaviour
 {
@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Color black;
     [SerializeField] private Color pink;
     [SerializeField] private Color sky;
-    [SerializeField] private Color violet;
 
     [SerializeField] private Animator doorAnim;
 
@@ -59,9 +58,6 @@ public class GameManager : MonoBehaviour
                 break;
             case BubbleTypes.SKY:
                 color = sky;
-                break;
-            case BubbleTypes.VIOLET:
-                color = black;
                 break;
             default:
                 color = Color.magenta;
