@@ -8,8 +8,9 @@ public class Canon : MonoBehaviour
     [SerializeField] private float rotationSpeed = 10f;
     [SerializeField] private float angleOffset = 90f;
 
-    [SerializeField] private BubbleTypes[] bubbleTypes = { BubbleTypes.RED, BubbleTypes.YELLOW, BubbleTypes.BLUE };
+    public BubbleTypes[] bubbleTypes = { BubbleTypes.RED, BubbleTypes.YELLOW, BubbleTypes.BLUE };
     public int currBubbleType = 0;
+    [HideInInspector] public BubbleTriangle bubbleTriangle;
 
     [SerializeField] private Transform canonTip;
     [SerializeField] private GameObject bubbleProjectile;
@@ -78,7 +79,7 @@ public class Canon : MonoBehaviour
 
         SpriteRenderer positionHelperSpriteRendered = positionHelper.GetComponent<SpriteRenderer>();
         Color color = gameManager.GetBubbleColor(bubbleTypes[currBubbleType]);
-        color.a = 0.2f;
+        color.a = 0.3f;
         positionHelperSpriteRendered.color = color;
         positionHelper.SetActive(isClicking);
         positionHelper.transform.position = targetCell.transform.position;
@@ -116,6 +117,8 @@ public class Canon : MonoBehaviour
         {
             bubbleSC.SetTargetCell(targetCell);
         }
+
+        bubbleTriangle.Shuffle();
     }
 
     void ControlCanon()

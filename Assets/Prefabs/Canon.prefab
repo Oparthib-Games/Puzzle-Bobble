@@ -472,7 +472,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1078413279700482405
 Transform:
   m_ObjectHideFlags: 0
@@ -702,7 +702,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1078413281270347326}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
@@ -738,7 +738,6 @@ MonoBehaviour:
   bubbleTypes: 000000000100000002000000
   currBubbleType: 0
   canonTip: {fileID: 1078413280431595262}
-  canonCircle: {fileID: 1078413279700482405}
   bubbleProjectile: {fileID: 2776665952437327044, guid: b5a277a67b1d53549bf68c1a660e0f75, type: 3}
   lineRenderer: {fileID: 1078413281432812963}
   targetCell: {fileID: 0}
@@ -1290,7 +1289,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -2024672841, guid: 0024297d5e17c3d43afb13a9cc00a2b5, type: 3}
-  m_Color: {r: 1, g: 0.17358488, b: 0.17358488, a: 0.48235294}
+  m_Color: {r: 1, g: 0.17358488, b: 0.17358488, a: 0.76862746}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
