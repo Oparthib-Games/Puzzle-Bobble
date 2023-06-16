@@ -29862,15 +29862,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9130525647694625039, guid: 64620251e1e307b43a12022bfb729bea, type: 3}
       propertyPath: violet.b
-      value: 0.7830189
+      value: 0.8867924
       objectReference: {fileID: 0}
     - target: {fileID: 9130525647694625039, guid: 64620251e1e307b43a12022bfb729bea, type: 3}
       propertyPath: violet.g
-      value: 0.20240295
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9130525647694625039, guid: 64620251e1e307b43a12022bfb729bea, type: 3}
       propertyPath: violet.r
-      value: 0.7015542
+      value: 0.59694225
       objectReference: {fileID: 0}
     - target: {fileID: 9130525647694625039, guid: 64620251e1e307b43a12022bfb729bea, type: 3}
       propertyPath: yellow.b
