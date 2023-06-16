@@ -33,7 +33,7 @@ public class Bubble : MonoBehaviour
 
         spriteRenderer.color = GameManager.GetBubbleColor(myType);
 
-        StartCoroutine(IERayCasting6Direction());
+        //StartCoroutine(IERayCasting6Direction());
     }
 
     private void SetSixDirections()

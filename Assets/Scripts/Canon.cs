@@ -103,7 +103,13 @@ public class Canon : MonoBehaviour
         bubbleSC.SetMyType(bubbleTypes[currBubbleType]);
         bubbleSC.Shoot(dir);
 
-        if(targetCell != null)
+        GameObject[] bubbles = GameObject.FindGameObjectsWithTag("bubble");
+        foreach (GameObject bubble in bubbles)
+        {
+            bubble.SendMessage("RayCasting6Direction", SendMessageOptions.DontRequireReceiver);
+        }
+
+        if (targetCell != null)
         {
             bubbleSC.SetTargetCell(targetCell);
         }
