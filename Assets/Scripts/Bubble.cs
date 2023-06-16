@@ -221,6 +221,7 @@ public class Bubble : MonoBehaviour
         }
         gameManager.PlayPopSound();
         Instantiate(explosion, transform.position, Quaternion.identity);
+        gameManager.CheckAliveBubbles();
         Destroy(this.gameObject, 0.1f);
     }
 

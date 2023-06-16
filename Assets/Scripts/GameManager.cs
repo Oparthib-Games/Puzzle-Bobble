@@ -19,10 +19,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Color sky;
     [SerializeField] private Color violet;
 
+    [SerializeField] private Animator doorAnim;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        doorAnim.gameObject.SetActive(true);
     }
 
     // Update is called once per frame
@@ -72,6 +74,25 @@ public class GameManager : MonoBehaviour
     public void PlayPopSound()
     {
         StartCoroutine(IEPlayPopSound());
+    }
+
+    public void CheckAliveBubbles()
+    {
+        StartCoroutine(IECheckAliveBubbles());
+    }
+
+    IEnumerator IECheckAliveBubbles()
+    {
+        yield return new WaitForSeconds(1f);
+
+        Bubble[] aliveBubbles = GameObject.FindObjectsOfType<Bubble>();
+
+        Debug.Log("Alive Bubbles: " + aliveBubbles.Length);
+        if (aliveBubbles.Length <= 0)
+        {
+            Debug.Log("Game Over");
+            doorAnim.SetTrigger("Close");
+        }
     }
 
     IEnumerator IEPlayPopSound()
