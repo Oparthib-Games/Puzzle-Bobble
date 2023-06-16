@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+public enum BubbleState { STATIC, MOVING };
+
 public class Bubble : MonoBehaviour
 {
     [SerializeField] private float shootingForce = 3f;
     [SerializeField] private BubbleTypes myType = BubbleTypes.RED;
+    [SerializeField] private BubbleState myState = BubbleState.MOVING;
     [SerializeField] private LayerMask bubbleLayer;
     [SerializeField] private float rayDistance = 0.3f;
     [SerializeField] private Vector3[] sixDirection;
@@ -29,11 +32,42 @@ public class Bubble : MonoBehaviour
 
     void Start()
     {
+        FindMyTargetCell();
         SetSixDirections();
 
         spriteRenderer.color = GameManager.GetBubbleColor(myType);
 
-        //StartCoroutine(IERayCasting6Direction());
+        StartCoroutine(IERayCasting6Direction());
+    }
+
+    void FindMyTargetCell()
+    {
+        if(myState == BubbleState.STATIC)
+        {
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1f);
+            float minDist = Mathf.Infinity;
+            foreach (Collider2D collider in colliders)
+            {
+                if (collider.gameObject.tag == "cell")
+                {
+                    BubbleCell targetCellSC = collider.GetComponent<BubbleCell>();
+
+                    if (targetCellSC.isEmpty)
+                    {
+                        float dist = Vector2.Distance(transform.position, collider.transform.position);
+
+                        if (dist < minDist)
+                        {
+                            minDist = dist;
+                            targetCell = collider.gameObject;
+                        }
+                    }
+                }
+            }
+
+            targetCell.GetComponent<BubbleCell>().isEmpty = false;
+            //targetCell.GetComponent<SpriteRenderer>().color = Color.cyan;
+        }
     }
 
     private void SetSixDirections()
@@ -49,9 +83,27 @@ public class Bubble : MonoBehaviour
 
     void Update()
     {
-        if(targetCell != null)
+        if(targetCell != null && myState == BubbleState.MOVING)
         {
             transform.position = Vector3.Lerp(transform.position, targetCell.transform.position, 10f * Time.deltaTime);
+
+            float distance = Vector3.Distance(transform.position, targetCell.transform.position);
+            if(distance <= 0.05f)
+            {
+                myState = BubbleState.STATIC;
+                StartCoroutine("SendMessageToAllBubble");
+                //targetCell.GetComponent<SpriteRenderer>().color = Color.cyan;
+            }
+        }
+    }
+
+    IEnumerator SendMessageToAllBubble()
+    {
+        yield return new WaitForSeconds(1f);
+        GameObject[] bubbles = GameObject.FindGameObjectsWithTag("bubble");
+        foreach (GameObject bubble in bubbles)
+        {
+            bubble.SendMessage("RayCasting6Direction", SendMessageOptions.DontRequireReceiver);
         }
     }
 
@@ -97,6 +149,7 @@ public class Bubble : MonoBehaviour
         connectedBubbles = new GameObject[0];
         sameColorConnectedBubbles = new GameObject[0];
         isRaycasting = true;
+        sameColorConnected = 0;
 
 
         PerformRaycast(sixDirection[0]);
@@ -113,9 +166,6 @@ public class Bubble : MonoBehaviour
 
     void PerformRaycast(Vector2 direction)
     {
-
-        Debug.Log("Direction" + direction);
-
         RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, direction, rayDistance, bubbleLayer);
 
         foreach (RaycastHit2D hit in hits)
@@ -146,7 +196,7 @@ public class Bubble : MonoBehaviour
 
     public void CheckSameColorConnected()
     {
-        Boom();
+        Debug.Log("Boom for: " + this.gameObject.name);
 
         foreach (GameObject bubble in sameColorConnectedBubbles)
         {
@@ -154,11 +204,16 @@ public class Bubble : MonoBehaviour
 
             bubbleSC.Boom();
         }
+        Boom();
     }
 
     public void Boom()
     {
-        Destroy(this.gameObject, 0.2f);
+        if(targetCell != null)
+        {
+            targetCell.GetComponent<BubbleCell>().isEmpty = true;
+        }
+        Destroy(this.gameObject, 0.1f);
     }
 
     private void OnDrawGizmos()
