@@ -15,12 +15,14 @@ public class Canon : MonoBehaviour
     [SerializeField] private Transform canonCircle;
     [SerializeField] private GameObject bubbleProjectile;
     [SerializeField] private LineRenderer lineRenderer;
+    [SerializeField] private GameObject targetCell;
+    [SerializeField] private GameObject positionHelper;
 
     #region Ray Casting
     private Vector3 raycastDirection;
     private float raycastDistance = Mathf.Infinity;
     private Vector3 rayHitPoint;
-    public LayerMask layerMask;
+    public LayerMask ignoreLayer;
     #endregion
 
     Vector3 mousePos;
@@ -39,6 +41,7 @@ public class Canon : MonoBehaviour
         mousePos = Mouse.current.position.ReadValue();
 
         RotateCircle();
+        HelperPositioning();
 
         if (mousePos.y > 250)
         {
@@ -65,6 +68,19 @@ public class Canon : MonoBehaviour
         LineRedenring();
     }
 
+    void HelperPositioning()
+    {
+        if (targetCell == null)
+            return;
+
+        SpriteRenderer positionHelperSpriteRendered = positionHelper.GetComponent<SpriteRenderer>();
+        Color color = GameManager.GetBubbleColor(bubbleTypes[currBubbleType]);
+        color.a = 0.2f;
+        positionHelperSpriteRendered.color = color;
+        positionHelper.SetActive(isClicking);
+        positionHelper.transform.position = targetCell.transform.position;
+    }
+
     void LineRedenring()
     {
         lineRenderer.startColor = GameManager.GetBubbleColor(bubbleTypes[currBubbleType]);
@@ -86,6 +102,11 @@ public class Canon : MonoBehaviour
 
         bubbleSC.SetMyType(bubbleTypes[currBubbleType]);
         bubbleSC.Shoot(dir);
+
+        if(targetCell != null)
+        {
+            bubbleSC.SetTargetCell(targetCell);
+        }
     }
 
     void ControlCanon()
@@ -133,9 +154,33 @@ public class Canon : MonoBehaviour
     {
         raycastDirection = canonTip.up;
 
-        RaycastHit2D hit = Physics2D.Raycast(canonTip.position, raycastDirection, raycastDistance);
-        //Debug.Log("Hit point: " + hit.point);
+        RaycastHit2D hit = Physics2D.Raycast(canonTip.position, raycastDirection, raycastDistance, ~ignoreLayer);
         rayHitPoint = hit.point;
+
+
+
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(rayHitPoint, 1f);
+        float minDist = Mathf.Infinity;
+        foreach (Collider2D collider in colliders)
+        {
+            Debug.Log("Collider found: " + collider.name);
+
+            if(collider.gameObject.tag == "cell")
+            {
+                BubbleCell targetCellSC = collider.GetComponent<BubbleCell>();
+
+                if(targetCellSC.isEmpty)
+                {
+                    float dist = Vector2.Distance(rayHitPoint, collider.transform.position);
+
+                    if(dist < minDist)
+                    {
+                        minDist = dist;
+                        targetCell = collider.gameObject;
+                    }
+                }
+            }
+        }
     }
 
     public void OnMouseDown()
@@ -149,5 +194,13 @@ public class Canon : MonoBehaviour
         Gizmos.DrawLine(canonTip.position, canonTip.position + raycastDirection * 500);
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(rayHitPoint, 0.3f);
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(rayHitPoint, 1f);
+
+        if(targetCell != null)
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireSphere(targetCell.transform.position, 0.2f);
+        }
     }
 }

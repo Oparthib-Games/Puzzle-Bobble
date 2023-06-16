@@ -10,6 +10,8 @@ public class Bubble : MonoBehaviour
     Rigidbody2D RB2D;
     SpriteRenderer spriteRenderer;
 
+    public GameObject targetCell;
+
     [SerializeField] private BubbleTypes myType = BubbleTypes.RED;
 
     void Awake()
@@ -25,7 +27,21 @@ public class Bubble : MonoBehaviour
 
     void Update()
     {
+        if(targetCell != null)
+        {
+            transform.position = Vector3.Lerp(transform.position, targetCell.transform.position, 10f * Time.deltaTime);
+        }
+    }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        RB2D.velocity = Vector2.zero;
+        RB2D.angularVelocity = 0f;
+        RB2D.bodyType = RigidbodyType2D.Static;
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        
     }
 
     public void SetMyType(BubbleTypes type)
@@ -33,8 +49,15 @@ public class Bubble : MonoBehaviour
         myType = type;
     }
 
+    public void SetTargetCell(GameObject cell)
+    {
+        targetCell = cell;
+
+        targetCell.GetComponent<BubbleCell>().isEmpty = false;
+    }
+
     public void Shoot(Vector3 dir)
     {
-        RB2D.AddForce(dir * shootingForce, ForceMode2D.Impulse);
+        //RB2D.AddForce(dir * shootingForce, ForceMode2D.Impulse);
     }
 }
