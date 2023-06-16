@@ -61,6 +61,9 @@ public class Canon : MonoBehaviour
                     Debug.Log($"Hit Point: {rayHitPoint1}");
                 }
             }
+        } else
+        {
+            isClicking = false;
         }
     }
 
