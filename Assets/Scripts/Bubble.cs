@@ -16,11 +16,14 @@ public class Bubble : MonoBehaviour
     [SerializeField] private GameObject[] connectedBubbles;
     [SerializeField] private GameObject[] sameColorConnectedBubbles;
     [SerializeField] private float sameColorConnected;
+    [SerializeField] private GameObject explosion;
 
     Rigidbody2D RB2D;
     SpriteRenderer spriteRenderer;
 
     public GameObject targetCell;
+
+    GameManager gameManager;
 
     bool isRaycasting;
 
@@ -36,8 +39,11 @@ public class Bubble : MonoBehaviour
         SetSixDirections();
 
         spriteRenderer.color = GameManager.GetBubbleColor(myType);
+        explosion.GetComponent<SpriteRenderer>().color = GameManager.GetBubbleColor(myType);
 
         StartCoroutine(IERayCasting6Direction());
+
+        gameManager = FindObjectOfType<GameManager>().gameObject.GetComponent<GameManager>();
     }
 
     void FindMyTargetCell()
@@ -213,6 +219,8 @@ public class Bubble : MonoBehaviour
         {
             targetCell.GetComponent<BubbleCell>().isEmpty = true;
         }
+        gameManager.PlayPopSound();
+        Instantiate(explosion, transform.position, Quaternion.identity);
         Destroy(this.gameObject, 0.1f);
     }
 

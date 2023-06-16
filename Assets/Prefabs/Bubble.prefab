@@ -138,6 +138,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shootingForce: 3
   myType: 0
+  myState: 1
   bubbleLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -146,4 +147,5 @@ MonoBehaviour:
   connectedBubbles: []
   sameColorConnectedBubbles: []
   sameColorConnected: 0
+  explosion: {fileID: 5893713265256058650, guid: ba340f14bc5993f4182332b732c03b21, type: 3}
   targetCell: {fileID: 0}

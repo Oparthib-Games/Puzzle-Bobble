@@ -6,6 +6,10 @@ public enum BubbleTypes { RED, YELLOW, BLUE, GREEN, BLACK, EXPLOSION };
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private AudioClip popSound;
+
+    bool isPlayingAudio;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -45,5 +49,22 @@ public class GameManager : MonoBehaviour
         }
 
         return color;
+    }
+
+    public void PlayPopSound()
+    {
+        StartCoroutine(IEPlayPopSound());
+    }
+
+    IEnumerator IEPlayPopSound()
+    {
+        if (!isPlayingAudio)
+        {
+            isPlayingAudio = true;
+            AudioSource.PlayClipAtPoint(popSound, Camera.main.transform.position);
+
+        }
+        yield return new WaitForSeconds(popSound.length);
+        isPlayingAudio = false;
     }
 }
