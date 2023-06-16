@@ -9,26 +9,29 @@ public class Canon : MonoBehaviour
     [SerializeField] private float angleOffset = 90f;
 
     [SerializeField] private BubbleTypes[] bubbleTypes = { BubbleTypes.RED, BubbleTypes.YELLOW, BubbleTypes.BLUE };
-    [SerializeField] private int currBubbleType = 0;
+    public int currBubbleType = 0;
 
     [SerializeField] private Transform canonTip;
-    [SerializeField] private Transform canonCircle;
     [SerializeField] private GameObject bubbleProjectile;
     [SerializeField] private LineRenderer lineRenderer;
     [SerializeField] private GameObject targetCell;
     [SerializeField] private GameObject positionHelper;
 
     #region Ray Casting
-    private Vector3 raycastDirection;
+    private Vector3 raycast1Direction;
+    private Vector3 raycast2Direction;
     private float raycastDistance = Mathf.Infinity;
-    private Vector3 rayHitPoint;
+    private Vector3 rayHitPoint1;
+    private Vector3 rayHitPoint2;
+    private Vector2 hitEndPoint;
     public LayerMask ignoreLayer;
+    private bool has2Ray;
     #endregion
 
     Vector3 mousePos;
     bool isClicking = false;
-    bool doCircleRotation = false;
-    float currCircleRotation = 0;
+    
+    
 
     GameManager gameManager;
 
@@ -40,9 +43,6 @@ public class Canon : MonoBehaviour
     void Update()
     {
         mousePos = Mouse.current.position.ReadValue();
-
-        RotateCircle();
-        HelperPositioning();
 
         if (mousePos.y > 250)
         {
@@ -57,7 +57,7 @@ public class Canon : MonoBehaviour
                 {
                     isClicking = false;
                     Shoot();
-                    Debug.Log($"Hit Point: {rayHitPoint}");
+                    Debug.Log($"Hit Point: {rayHitPoint1}");
                 }
             }
         }
@@ -66,7 +66,9 @@ public class Canon : MonoBehaviour
     void FixedUpdate()
     {
         RayCasting();
+        CellFindingRayCasting();
         LineRedenring();
+        HelperPositioning();
     }
 
     void HelperPositioning()
@@ -86,7 +88,7 @@ public class Canon : MonoBehaviour
     {
         lineRenderer.startColor = gameManager.GetBubbleColor(bubbleTypes[currBubbleType]);
 
-        float magnitude = (rayHitPoint - canonTip.position).magnitude;
+        float magnitude = (rayHitPoint1 - canonTip.position).magnitude;
 
         lineRenderer.SetPosition(0, Vector3.zero);
         lineRenderer.SetPosition(1, new Vector3(0, magnitude, 0));
@@ -96,7 +98,7 @@ public class Canon : MonoBehaviour
 
     void Shoot()
     {
-        Vector3 dir = rayHitPoint - transform.position;
+        Vector3 dir = rayHitPoint1 - transform.position;
 
         GameObject projectileGO = Instantiate(bubbleProjectile, canonTip.position, Quaternion.identity) as GameObject;
         Bubble bubbleSC = projectileGO.GetComponent<Bubble>();
@@ -129,58 +131,51 @@ public class Canon : MonoBehaviour
         transform.rotation = smoothRot;
     }
 
-    void ToggleRotateCircle()
-    {
-        currCircleRotation -= 120f;
-        doCircleRotation = true;
-
-        if(currBubbleType < 2)
-        {
-            currBubbleType++;
-        } else
-        {
-            currBubbleType = 0;
-        }
-    }
-    void RotateCircle()
-    {
-        if (doCircleRotation)
-        {
-            Quaternion targetRot = Quaternion.Euler(0f, 0f, currCircleRotation);
-            Quaternion smoothRot = Quaternion.Slerp(canonCircle.rotation, targetRot, 5f * Time.deltaTime);
-            canonCircle.rotation = smoothRot;
-
-            if(Mathf.Abs(currCircleRotation - canonCircle.rotation.z) < 2)
-            {
-                doCircleRotation = false;
-            }
-        }
-    }
+    
+    
 
     void RayCasting()
     {
-        raycastDirection = canonTip.up;
+        raycast1Direction = canonTip.up;
 
-        RaycastHit2D hit = Physics2D.Raycast(canonTip.position, raycastDirection, raycastDistance, ~ignoreLayer);
-        rayHitPoint = hit.point;
+        RaycastHit2D hit = Physics2D.Raycast(canonTip.position, raycast1Direction, raycastDistance, ~ignoreLayer);
+        rayHitPoint1 = hit.point;
 
+        //if (hit.collider && hit.collider.tag == "platform")
+        //{
+        //    has2Ray = true;
 
+        //    var deflectRotation = Quaternion.FromToRotation(-raycast1Direction, hit.normal);
+        //    var raycast2Direction = deflectRotation * hit.normal;
 
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(rayHitPoint, 1f);
+        //    RaycastHit2D hit2 = Physics2D.Raycast(rayHitPoint1, raycast2Direction, raycastDistance, ~ignoreLayer);
+        //    rayHitPoint2 = hit2.point;
+        //}
+        //else
+        //{
+        //    has2Ray = false;
+        //}
+
+        hitEndPoint = has2Ray ? rayHitPoint2 : rayHitPoint1;
+    }
+
+    private void CellFindingRayCasting()
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(hitEndPoint, 1f);
         float minDist = Mathf.Infinity;
         foreach (Collider2D collider in colliders)
         {
             //Debug.Log("Collider found: " + collider.name);
 
-            if(collider.gameObject.tag == "cell")
+            if (collider.gameObject.tag == "cell")
             {
                 BubbleCell targetCellSC = collider.GetComponent<BubbleCell>();
 
-                if(targetCellSC.isEmpty)
+                if (targetCellSC.isEmpty)
                 {
-                    float dist = Vector2.Distance(rayHitPoint, collider.transform.position);
+                    float dist = Vector2.Distance(hitEndPoint, collider.transform.position);
 
-                    if(dist < minDist)
+                    if (dist < minDist)
                     {
                         minDist = dist;
                         targetCell = collider.gameObject;
@@ -190,19 +185,23 @@ public class Canon : MonoBehaviour
         }
     }
 
-    public void OnMouseDown()
-    {
-        ToggleRotateCircle();
-    }
+    //public void OnMouseDown()
+    //{
+    //    ToggleRotateCircle();
+    //}
 
     void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawLine(canonTip.position, canonTip.position + raycastDirection * 500);
+        Gizmos.DrawLine(canonTip.position, canonTip.position + raycast1Direction * 500);
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(rayHitPoint, 0.3f);
+        Gizmos.DrawLine(rayHitPoint1, rayHitPoint1 + raycast2Direction * 500);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(rayHitPoint1, 0.3f);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(rayHitPoint2, 0.3f);
         Gizmos.color = Color.white;
-        Gizmos.DrawWireSphere(rayHitPoint, 1f);
+        Gizmos.DrawWireSphere(hitEndPoint, 1f);
 
         if(targetCell != null)
         {

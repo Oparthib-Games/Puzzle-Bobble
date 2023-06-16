@@ -6,6 +6,7 @@ TagManager:
   tags:
   - bubble
   - cell
+  - platform
   layers:
   - Default
   - TransparentFX
