@@ -163,7 +163,7 @@ public class Canon : MonoBehaviour
         float minDist = Mathf.Infinity;
         foreach (Collider2D collider in colliders)
         {
-            Debug.Log("Collider found: " + collider.name);
+            //Debug.Log("Collider found: " + collider.name);
 
             if(collider.gameObject.tag == "cell")
             {

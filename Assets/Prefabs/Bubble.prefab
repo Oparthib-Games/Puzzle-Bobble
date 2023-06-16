@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2776665952437326904}
   - component: {fileID: 2776665952437327047}
   - component: {fileID: 4141271430317595597}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Bubble
   m_TagString: bubble
   m_Icon: {fileID: 0}
@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 2776665952437327044}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 4, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 0.48, y: 0.48, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -138,3 +138,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shootingForce: 3
   myType: 0
+  bubbleLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  rayDistance: 0.5
+  sixDirection: []
+  connectedBubbles: []
+  targetCell: {fileID: 0}
