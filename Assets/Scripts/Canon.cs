@@ -30,10 +30,11 @@ public class Canon : MonoBehaviour
     bool doCircleRotation = false;
     float currCircleRotation = 0;
 
+    GameManager gameManager;
 
     void Start()
     {
-        
+        gameManager = FindObjectOfType<GameManager>().gameObject.GetComponent<GameManager>();
     }
 
     void Update()
@@ -74,7 +75,7 @@ public class Canon : MonoBehaviour
             return;
 
         SpriteRenderer positionHelperSpriteRendered = positionHelper.GetComponent<SpriteRenderer>();
-        Color color = GameManager.GetBubbleColor(bubbleTypes[currBubbleType]);
+        Color color = gameManager.GetBubbleColor(bubbleTypes[currBubbleType]);
         color.a = 0.2f;
         positionHelperSpriteRendered.color = color;
         positionHelper.SetActive(isClicking);
@@ -83,7 +84,7 @@ public class Canon : MonoBehaviour
 
     void LineRedenring()
     {
-        lineRenderer.startColor = GameManager.GetBubbleColor(bubbleTypes[currBubbleType]);
+        lineRenderer.startColor = gameManager.GetBubbleColor(bubbleTypes[currBubbleType]);
 
         float magnitude = (rayHitPoint - canonTip.position).magnitude;
 

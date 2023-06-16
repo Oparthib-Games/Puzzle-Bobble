@@ -38,12 +38,12 @@ public class Bubble : MonoBehaviour
         FindMyTargetCell();
         SetSixDirections();
 
-        spriteRenderer.color = GameManager.GetBubbleColor(myType);
-        explosion.GetComponent<SpriteRenderer>().color = GameManager.GetBubbleColor(myType);
-
-        StartCoroutine(IERayCasting6Direction());
-
         gameManager = FindObjectOfType<GameManager>().gameObject.GetComponent<GameManager>();
+
+        spriteRenderer.color = gameManager.GetBubbleColor(myType);
+        explosion.GetComponent<SpriteRenderer>().color = gameManager.GetBubbleColor(myType);
+
+        //StartCoroutine(IERayCasting6Direction());
     }
 
     void FindMyTargetCell()
@@ -105,7 +105,7 @@ public class Bubble : MonoBehaviour
 
     IEnumerator SendMessageToAllBubble()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.2f);
         GameObject[] bubbles = GameObject.FindGameObjectsWithTag("bubble");
         foreach (GameObject bubble in bubbles)
         {
@@ -228,7 +228,7 @@ public class Bubble : MonoBehaviour
     {
         if(Application.isPlaying)
         {
-            Gizmos.color = GameManager.GetBubbleColor(myType);
+            Gizmos.color = gameManager.GetBubbleColor(myType);
             Gizmos.DrawLine(transform.position, transform.position + sixDirection[0] * rayDistance);
             Gizmos.DrawLine(transform.position, transform.position + sixDirection[1] * rayDistance);
             Gizmos.DrawLine(transform.position, transform.position + sixDirection[2] * rayDistance);

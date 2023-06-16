@@ -10,6 +10,12 @@ public class GameManager : MonoBehaviour
 
     bool isPlayingAudio;
 
+    [SerializeField] private Color red;
+    [SerializeField] private Color yellow;
+    [SerializeField] private Color blue;
+    [SerializeField] private Color green;
+    [SerializeField] private Color black;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,26 +28,26 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public static Color GetBubbleColor(BubbleTypes type)
+    public Color GetBubbleColor(BubbleTypes type)
     {
         Color color = Color.white;
 
         switch (type)
         {
             case BubbleTypes.RED:
-                color = Color.red;
+                color = red;
                 break;
             case BubbleTypes.YELLOW:
-                color = Color.yellow;
+                color = yellow;
                 break;
             case BubbleTypes.BLUE:
-                color = Color.blue;
+                color = blue;
                 break;
             case BubbleTypes.GREEN:
-                color = Color.green;
+                color = green;
                 break;
             case BubbleTypes.BLACK:
-                color = Color.black;
+                color = black;
                 break;
             case BubbleTypes.EXPLOSION:
                 color = Color.magenta;
