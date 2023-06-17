@@ -13719,7 +13719,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4141271430317595597, guid: b5a277a67b1d53549bf68c1a660e0f75, type: 3}
       propertyPath: myType
-      value: 7
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4141271430317595597, guid: b5a277a67b1d53549bf68c1a660e0f75, type: 3}
       propertyPath: myState
